@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import lombok.SneakyThrows;
 
 import java.util.function.Function;
 
@@ -16,13 +15,6 @@ public interface Parser {
 
     static JsonNode changeJsonValue(JsonNode rootNode, String path, Function<JsonNode, String> function) {
         return ((ObjectNode) rootNode).put(path, function.apply(rootNode.findPath(path)));
-    }
-
-    @SneakyThrows
-    static JsonNode findJsonNode(String json, String path) {
-        JsonNode rootNode = mapper.readTree(json);
-
-        return rootNode.findPath(path);
     }
 
     static JsonNode findJsonNode(JsonNode node, String path) {
