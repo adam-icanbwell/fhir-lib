@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+}
+
+group 'com.bwell'
+version '1.0-SNAPSHOT'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(15))
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('hapiVersion', "6.0.2")
+}
+
+dependencies {
+    //Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.4'
+    annotationProcessor 'org.projectlombok:lombok:1.18.4'
+
+    //FHIR
+    implementation "ca.uhn.hapi.fhir:hapi-fhir-base:${hapiVersion}"
+    implementation "ca.uhn.hapi.fhir:hapi-fhir-structures-r4:${hapiVersion}"
+
+    //JSON
+    implementation group: 'org.json', name: 'json', version: '20220320'
+
+    //Jackson
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
