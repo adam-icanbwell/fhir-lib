@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'java-library'
 }
 
 group 'com.bwell'
@@ -11,9 +11,10 @@ configurations {
     }
 }
 
+//Sets Java Version
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(15))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 
@@ -21,24 +22,30 @@ repositories {
     mavenCentral()
 }
 
+//Global Variables
 ext {
     set('hapiVersion', "6.0.2")
 }
 
+//Creates JAR
+jar {
+    archiveBaseName = rootProject.name
+}
+
 dependencies {
     //Lombok
-    compileOnly 'org.projectlombok:lombok:1.18.4'
-    annotationProcessor 'org.projectlombok:lombok:1.18.4'
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
     //FHIR
-    implementation "ca.uhn.hapi.fhir:hapi-fhir-base:${hapiVersion}"
-    implementation "ca.uhn.hapi.fhir:hapi-fhir-structures-r4:${hapiVersion}"
+    api "ca.uhn.hapi.fhir:hapi-fhir-base:${hapiVersion}"
+    api "ca.uhn.hapi.fhir:hapi-fhir-structures-r4:${hapiVersion}"
 
     //JSON
-    implementation group: 'org.json', name: 'json', version: '20220320'
+    api group: 'org.json', name: 'json', version: '20220320'
 
     //Jackson
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
+    api group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
