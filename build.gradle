@@ -1,5 +1,7 @@
 plugins {
     id 'java-library'
+    id "maven-publish"
+    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
 }
 
 group 'com.bwell'
@@ -25,6 +27,13 @@ repositories {
 //Global Variables
 ext {
     set('hapiVersion', "6.0.2")
+    set('mavenUsername', "maven.user")
+    set('mavenPassword', "7LwnabSxFw42Vn4")
+
+    repos = [
+            nexusRelease : "https://nexus.services.bwell.zone/repository/bwell-maven",
+            nexusSnapshot : "https://nexus.services.bwell.zone/repository/bwell-maven",
+    ]
 }
 
 //Creates JAR
@@ -53,4 +62,28 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifact("build/libs/FhirLib-$version" + ".jar") {
+                extension 'jar'
+            }
+        }
+    }
+    repositories {
+        maven {
+            name 'nexus'
+            if (project.version.endsWith("-SNAPSHOT")) {
+                url repos.nexusSnapshot
+            } else {
+                url repos.nexusRelease
+            }
+            credentials {
+                username "${mavenUsername}"
+                password "${mavenPassword}"
+            }
+        }
+    }
 }
